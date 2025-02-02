@@ -4,7 +4,7 @@ A production-ready Django starter template with pre-configured common apps inclu
 
 ## Overview
 
-This template provides a solid foundation for modern Django applications, pre-configured with essential tools and settings.  It streamlines development with an improved folder structure, environment switching between production and development, and more, allowing you to spend less time on boilerplate and better stucture when expanding your application in the furture.
+This template provides a solid foundation for modern Django applications, pre-configured with essential tools and settings.  It streamlines development with an improved folder structure, environment switching between production and development, and more, allowing you to spend less time on boilerplate and better structure when expanding your application.
 
 Key features:
 
