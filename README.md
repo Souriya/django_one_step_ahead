@@ -13,7 +13,7 @@ Key features:
 * **Django REST API:** Integrated Django REST Framework for building powerful APIs.
 * **Production-Grade Server:** Replaces the default `runserver` with a production-ready WSGI server (CherryPy). This ensures your project is ready for production deployment.
 * **CSS, JS, Icon, and Font Libraries:** Includes lightweight Google Material Design CSS, Google Material Icon library and Lao fonts.
-* **Proction Setting and Development Setting:** Streamlines development workflows with separate settings files for production and development environments, easily switch between configurations.
+* **Production and Development Settings:** Streamlines development workflows with separate settings files for production and development environments, easily switch between configurations.
 * **Optional Docker Support:** Also include docker compose to simplifies deployment and ensures consistency across environments.
 
 ## Getting Started
