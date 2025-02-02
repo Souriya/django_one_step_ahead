@@ -15,7 +15,6 @@ Key features:
 * **CSS, JS, Icon, and Font Libraries:** Includes lightweight Google Material Design CSS, Google Material Icon library and Lao fonts.
 * **Proction Setting and Development Setting:** Streamlines development workflows with separate settings files for production and development environments, easily switch between configurations.
 * **Optional Docker Support:** Also include docker compose to simplifies deployment and ensures consistency across environments.
-* **[Add other key features here as needed, e.g., Testing setup, Static file management, etc.]**
 
 ## Getting Started
 
