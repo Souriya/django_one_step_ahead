@@ -11,7 +11,7 @@ Key features:
 * **Extended User Profiles:** Easily manage and extend user information beyond the basic Django User model to collect more user information other than username, password, and email.
 * **Django Authentication:** A pre-configured and ready-to-use authentication system, which most apps require so that you don't need to go through setting up Django core for Authentication every time you start a new Django project.
 * **Django REST API:** Integrated Django REST Framework for building powerful APIs.
-* **Production-Grade Server:** Replaces the default `runserver` with a production-ready WSGI server (CherryPy). This ensures your project is ready for production deployment.
+* **Production-Grade Server:** Replaces the default `runserver` with a production-ready web server, CherryPy. This prepare your project for production deployment without the need to setup Nginx or Apache.
 * **CSS, JS, Icon, and Font Libraries:** Includes lightweight Google Material Design CSS, Google Material Icon library and Lao fonts.
 * **Production and Development Settings:** Streamlines development workflows with separate settings files for production and development environments, easily switch between configurations.
 * **Optional Docker Support:** Also include docker compose to simplifies deployment and ensures consistency across environments.
