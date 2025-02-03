@@ -1,24 +1,26 @@
 import time
 
 from django.core.management.base import BaseCommand
+from django.db import connections
 from django.db.utils import OperationalError
-
-from psycopg import OperationalError as PsycopgError
 
 
 class Command(BaseCommand):
-    """django command to wait for DB to start before connecting to DB"""
+    help = 'Waits for the database to be available.'
 
     def handle(self, *args, **options):
+        self.stdout.write('Waiting for database...')
+        db_conn = None
+        max_attempts = 60  # Adjust as needed (e.g., 60 seconds)
 
-        self.stdout.write('waiting for database ...')
-        db_up = False
-        while db_up is False:
+        for _ in range(max_attempts):
             try:
-                self.check(databases=['default'])
-                db_up = True
-            except (PsycopgError, OperationalError):
-                self.stdout.write('database is not ready yet, wait for 1 sec ...')
-                time.sleep(1)
-
-        self.stdout.write(self.style.SUCCESS('database is ready ..'))
+                db_conn = connections['default'].cursor()
+                break  # Database is ready
+            except OperationalError:
+                time.sleep(1)  # Wait for 1 second
+        if db_conn:
+            self.stdout.write(self.style.SUCCESS('Database is ready!'))
+        else:
+            self.stdout.write(self.style.ERROR('Database is not available after multiple attempts.'))
+            exit(1) # Exit with an error code if the database is not available
