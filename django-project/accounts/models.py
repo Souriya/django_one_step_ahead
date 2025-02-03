@@ -58,6 +58,9 @@ class ModelName(models.Model):
         verbose_name = 'Model Name'
         verbose_name_plural = 'Model Names'
         ordering = ['field1']
+        indexes = [
+            models.Index(fields=['field1']),
+        ]
 
     def __str__(self):
         return self.field1

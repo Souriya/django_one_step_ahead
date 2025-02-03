@@ -8,7 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . import forms
 from . import models
-import custom_apps.abis_meeting.models as MeetingModels
 
 def home(request):
     context = {
@@ -88,13 +87,10 @@ def user_register(request):
         form = forms.UserRegistrationForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
-            new_user = form.save(commit=False)  # create new user object in
-            # memory, but not write it to db yet
+            new_user = form.save(commit=False)  # create new user object in memory, but not write it to db yet
             new_user.set_password(form_data['password'])
-            # set_password() is a method of User model that handle password
-            # encryption
-            new_user.save()  # if set password successful, write user object
-            # to db, .save() is committed by default.
+            # set_password() is a method of User model that handle password encryption
+            new_user.save()  # if set password successful, write user object to db, .save() is committed by default.
             profile = models.Profile.objects.create(user=new_user)
             profile.phone = form_data['phone']
             profile.nation = form_data['nation']
