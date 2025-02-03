@@ -12,5 +12,5 @@ exclude =
 # exclude the import but unused check
 ignore = F401
 
-# increase the maximum line length in Flake8 to 110 characters
-max-line-length = 110
+# increase the maximum line length in Flake8 to 120 characters
+max-line-length = 120

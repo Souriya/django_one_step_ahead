@@ -24,10 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-04p-1al#avxqx*snktubg%hihlx-8$fhm#e@h%+8oznn(t09nt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -67,7 +66,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     # custom libs
-    # 'all_apps.abis_meeting.middleware.PhoneNumberPasscodeMiddleware',
 ]
 
 ROOT_URLCONF = 'configs.urls'
@@ -216,7 +214,7 @@ SPECTACULAR_SETTING = {
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # (Optional) Set the session expiration time (e.g., 30 minutes of inactivity)
-# SESSION_COOKIE_AGE = 900  # 30 minutes (in seconds)
+SESSION_COOKIE_AGE = 10800  # 3 hrs (in seconds)
 
 
 # django core email backend for development use, it sends email to console
