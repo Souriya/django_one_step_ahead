@@ -45,7 +45,10 @@ urlpatterns = [
     path('',
         include('core.urls', namespace='core')
     ),
+]
+
+'''
     path('new_app/',
         include('custom_apps.new_app.urls', namespace='new_app')
     ),
-]
+'''
