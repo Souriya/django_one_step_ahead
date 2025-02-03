@@ -19,4 +19,4 @@ Key features:
 ## Getting Started
 
 1. **Clone the repository:**
-2. **Read the tutorial:**
+2. **Read the tutorial:** Comming soon!
