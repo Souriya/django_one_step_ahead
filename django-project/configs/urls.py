@@ -26,7 +26,7 @@ from drf_spectacular.views import (
 )
 
 urlpatterns = [
-    path('admin8/', admin.site.urls),
+    path('admin12321/', admin.site.urls),
     path('api-auth/',
          include('rest_framework.urls', namespace='rest_framework')),
     path(
@@ -45,7 +45,7 @@ urlpatterns = [
     path('',
         include('core.urls', namespace='core')
     ),
-    path('abis_meeting/',
-        include('custom_apps.abis_meeting.urls', namespace='meeting')
+    path('new_app/',
+        include('custom_apps.new_app.urls', namespace='new_app')
     ),
 ]
