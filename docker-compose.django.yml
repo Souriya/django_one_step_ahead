@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  django-app:
+    build:
+        context: . # use current directory that running the docker-compose command
+        args:
+          - DEV=false
+    container_name: django_app
+    ports:
+      - "8000:8000"
+    depends_on: # Ensure the database is running first
+      - postgres
+    environment:
+      - POSTGRES_HOST=postgres # Use the service name as the hostname
+      - POSTGRES_USER=db_user_100
+      - POSTGRES_PASSWORD=db_password_100!!!
+      - POSTGRES_DB=db_name_100
+      # - SECRET_KEY=django_secret_key
+    volumes:
+      - ./django-project:/django-project # Mount Django project directory
+    command: sh -c "python3 manage.py wait_for_db && \
+                    python3 manage.py makemigrations && \
+                    python3 manage.py migrate && \
+                    python3 manage.py collectstatic --noinput && \
+                    python3 servers/cpserver.py"
+    # wait_for_db is a custom management command that waits for the PostgreSQL database to become available
+  postgres: # Define the postgres service to make the 'depends_on' work.
+    image: postgres:16-bookworm
+    container_name: postgres_db # This should match the name in the  docker-compose.db file
+    ports:
+      - "5432:5432" # You can expose the port here if needed
+    environment:
+      POSTGRES_USER: db_user_100
+      POSTGRES_PASSWORD: db_password_100!!!
+      POSTGRES_DB: db_name_100
+    volumes:
+      - db_data:/var/lib/postgresql/data # Persist data
+
+volumes:
+  db_data:

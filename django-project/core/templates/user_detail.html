@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block main-content %}
+<br>
+<div class="w3-card-4">
+
+<header class="w3-container w3-light-grey w3-center">
+  <h3><strong>{{ user.first_name}} {{ user.last_name}}</strong></h3>
+</header>
+
+<div class="w3-container">
+  <p><strong>Title:</strong> {{ user.profile.org }}</p>
+  <hr>
+  <p><strong>Nation:</strong> {{ user.profile.nation }}</p>
+  <hr>
+  <p><strong>Oranization:</strong> {{ user.profile.org }}</p>
+</div>
+
+</div>
+<br>
+
+<div class="w3-panel w3-theme w3-center">
+  <h4 class="lao-noto">Time Slots</h4>
+</div>
+<table class="w3-table w3-striped">
+
+    {% for i in time_slots %}
+        <tr>
+            <td><button class="w3-btn w3-round-large">{{ i }}<button></td>
+            <td><a href='{% url 'core:request_meeting' user.id i.id%}' class="w3-btn w3-round-large w3-black">Request Meeting</a></td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+
+{% endblock %}
