@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
-    'core',
 
     # 3rd party apps
     'rest_framework',
@@ -49,9 +48,10 @@ INSTALLED_APPS = [
 
     # custom apps
     #'custom_apps.app_name',
+    'accounts',
 ]
 
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
