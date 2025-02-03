@@ -6,58 +6,56 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %} {{ title }} {% endblock %}</title>
 
-        <!-- CSS libs-->
+        {% comment %} a ightweight Google Material Design CSS libs {% endcomment %}
         <link href="{% static "css/w3/w3.css" %}" rel="stylesheet">
-        <link href="{% static "css/w3/w3-theme-blue.css" %}" rel="stylesheet">
+        {% comment %} take color preference from user profile or default to blue if not set {% endcomment %}
+        <link href="{% static "css/w3/"|add:color|default:"w3-theme-blue.css" %}" rel="stylesheet">
 
-        <!-- Font libs-->
-        <link href="{% static "fonts/fontawesome-free-6/css/all.min.css" %}" rel="stylesheet">
+        {% comment %} your own Custom CSS goes here {% endcomment %}
+        <link href="{% static "css/custom.css" %}" rel="stylesheet">
+
+        {% comment %} additional CSS {% endcomment %}
+        {% block css %}
+        {% endblock %}
+
+        {% comment %} Lao Font libs fir Lao app development {% endcomment %}
         <link href="{% static "fonts/lao/lao-font.css" %}" rel="stylesheet">
+        {% comment %} if you want to include fontawesome, uncommend line below {% endcomment}
+        {% comment %} <link href="{% static "fonts/fontawesome-free-6/css/all.min.css" %}" rel="stylesheet"> {% endcomment %}
 
-        <!-- classic google material icons .material-icons .material-icons-outlined-->
+        {% comment %} classic google material icons .material-icons .material-icons-outlined {% endcomment %}
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Round" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
 
-        <!-- Custom CSS -->
-        <link href="{% static "css/custom.css" %}" rel="stylesheet">
-
-        <!-- additional CSS -->
-        {% block css %}
-        <style>
-
-        </style>
-        {% endblock %}
     </head>
     <body class="lao-noto">
-        <!-- Navigation -->
-        {% block navigation %}
+        {% comment %} Top Navigation {% endcomment %}
+        {% block navigation_top %}
         {% endblock %}
 
-        <!-- Hero -->
+        {% comment %} Hero {% endcomment %}
         {% block hero %}
-            <div class="w3-row w3-container w3-center w3-blue">
-                <img src="{% static 'images/logo-abis-02.png' %}" alt="logo" class="w3-image">
-            </div>
         {% endblock %}
 
-        <!-- Main content of the page -->
-        <div class="w3-row w3-rest">
+        {% comment %} left Navigation {% endcomment %}
+        {% block navigation_left %}
+        {% endblock %}
+
+        {% comment %} Main content of the page {% endcomment %}
         {% block main-content %}
         {% endblock %}
-        </div>
 
-        <!-- page footer -->
+        {% comment %} page footer {% endcomment %}
         {% block footer %}
         {% endblock %}
 
-        <!-- Main JS libs -->
-        <script src="{% static "js/w3.js" %}"></script>
+        {% comment %} Main JS libs {% endcomment %}
         <script src="{% static "js/jquery-3.7.1.min.js" %}"></script>
 
-        <!-- additional JS libs -->
+        {% comment %} additional JS libs {% endcomment %}
         {% block js %}
         {% endblock %}
     </body>
