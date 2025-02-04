@@ -47,11 +47,11 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     # custom apps
-    #'custom_apps.app_name',
-    'accounts',
+    #'apps.app_name',
+    'apps.users',
 ]
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'apps.users.User'
 
 AUTHENTICATION_BACKENDS = [
     'accounts.MultiAuthBackend',  # Your custom backend
