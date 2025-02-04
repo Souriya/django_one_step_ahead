@@ -11,3 +11,5 @@ CherryPy>=18.10
 cheroot>=10.0
 django-import-export
 python-decouple
+django-ratelimit
+pymemcache

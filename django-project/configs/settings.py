@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'django_filters',
     'widget_tweaks',
+    'ratelimit',
 
     # custom apps
     #'apps.app_name',
@@ -54,7 +56,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'apps.users.User'
 
 AUTHENTICATION_BACKENDS = [
-    'accounts.MultiAuthBackend',  # Your custom backend
+    'apps.users.MultiAuthBackend',  # custom authentication backend
     'django.contrib.auth.backends.ModelBackend',  # Default ModelBackend as fallback
 ]
 
@@ -69,6 +71,7 @@ MIDDLEWARE = [
 
     # 3rd party libs
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'ratelimit.middleware.RatelimitMiddleware',
 
     # custom libs
 ]
@@ -191,13 +194,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # URL to redirect after login  if the contrib.auth.views.login view gets no
 # next parameter
-#LOGIN_REDIRECT_URL = reverse('core:user_dashboard')
+LOGIN_REDIRECT_URL = reverse('users:home')
 
 # URL to redirect the user to login page
-#LOGIN_URL = reverse_lazy('core:login')
+LOGIN_URL = reverse_lazy('users:login')
 
-# URL to redirect the user to logout page
-#LOGOUT_URL = reverse_lazy('core:logout')
+# URL to redirect the user to after logout
+LOGOUT_URL = reverse_lazy('users:login')
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
