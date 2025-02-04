@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'django_filters',
     'widget_tweaks',
-    'ratelimit',
+    'ratelimit', # rate limit
+    'axes', # tracking user login fail attempts
 
     # custom apps
     #'apps.app_name',
@@ -70,8 +71,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # 3rd party libs
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'ratelimit.middleware.RatelimitMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # serving static file via django
+    'ratelimit.middleware.RatelimitMiddleware', # rate limit request
+    'axes.middleware.AxesMiddleware', # tracking user login fail attempts
 
     # custom libs
 ]
@@ -237,3 +239,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'xxx@gmail.com'
 # EMAIL_HOST_PASSWORD = 'xxx'
+
+# Axes settings
+AXES_FAILURE_LIMIT = 10  # Number of login failed attempts before blocking
+AXES_ONLY_USER_PER_IP = True # If True, it will block the IP address instead of the user.
+AXES_LOCKOUT_MINUTES = 60  # Block duration in minutes
+AXES_IP_LOCKOUT_MINUTES = 60 # Block duration for IP addresses
+# in seconds after a successful login, this helps prevent brute-force attacks immediately after a successful login.
+AXES_COOLOFF_TIME = 300
+AXES_ADMIN_INTERFACE_ENABLED = True # enable the admin interface for managing blocked users/IPs.
