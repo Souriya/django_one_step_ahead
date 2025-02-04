@@ -53,6 +53,11 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'accounts.User'
 
+AUTHENTICATION_BACKENDS = [
+    'accounts.MultiAuthBackend',  # Your custom backend
+    'django.contrib.auth.backends.ModelBackend',  # Default ModelBackend as fallback
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

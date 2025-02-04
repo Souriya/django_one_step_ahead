@@ -1,9 +1,10 @@
 # coding=utf-8
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
+from django.core.validators import RegexValidator
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -12,38 +13,45 @@ from django.contrib.auth.models import (
 )
 
 
+phone_regex = RegexValidator(
+    regex=r"^\d{8}$",  # Exactly 8 digits
+    message=_("Phone number must be 8 digits."), # _() allow text to be translated
+)
+
+
 class User(AbstractUser):
+    '''custom user model inherited from default User model'''
 
-    orgs = models.ForeignKey('Organization', on_delete=models.SET_NULL, related_name='org', null=True, blank=True)
-
-class Profile(models.Model):
-    # we create user object with 1-to-1 relationship with User model,
-    # and we refer to the User model using global setting instead of refer to it directly
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
-
-    # personal info
-    uuid = models.CharField(max_length=30, null=True, blank=True)
-    phone = models.CharField(max_length=120, null=True, blank=True)
-    nation = models.CharField(max_length=120, null=True, blank=True)
-    position = models.CharField(max_length=120, null=True, blank=True)
-    org = models.CharField(max_length=120, null=True, blank=True)
+    # add phone number as extra field
+    phone_number = models.CharField(max_length=8, unique=True, validators=[phone_regex],  # Use the regex validator
+        error_messages={
+            "unique": _("A user with that phone number already exists."),
+        },
+    )
+    # change email to be unique too, default django auth allow duplicated email address
+    email = models.EmailField(max_length=60, unique=True,  # Make email unique
+        error_messages={
+            "unique": _("A user with that email address already exists."),
+        },
+    )
+    # now when create an user account, it requires username, phone and email
+    REQUIRED_FIELDS = ["email", "phone_number"]  # Email, phone number are now required
 
     def __str__(self):
-        return 'Profile of {}'.format(self.user.username)
+        return f"{self.first_name} {self.last_name} ({self.phone_number})"
+
+
+class Profile(models.Model):
+    '''user profile link to User, every user account has one associated profile'''
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    theme_color = models.CharField(max_length=50, blank=True, null=True, default='w3-theme-blue.css')
+
+    def __str__(self):
+        return 'Profile of {}'.format(self.user.phone_number)
 
     def user_email(self):
         return self.user.email
-
-
-class Organization(models.Model):
-    name = models.CharField(max_length=120, blank=True)
-
-    class Meta:
-        verbose_name = 'Oraganization'
-        verbose_name_plural = 'Oraganizations'
-
-    def __str__(self):
-        return self.name
 
 
 '''

@@ -1,4 +1,4 @@
-Django>=4.2.8,<4.3
+Django>=4.2,<5.3
 djangorestframework>=3.14.0
 psycopg[binary]>=3.1.8
 drf-spectacular>=0.26.5
@@ -10,3 +10,4 @@ django-widget-tweaks
 CherryPy>=18.10
 cheroot>=10.0
 django-import-export
+python-decouple
