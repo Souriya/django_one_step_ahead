@@ -21,7 +21,7 @@ from . import models
 logger = logging.getLogger(__name__)
 
 @method_decorator(never_cache, name='dispatch')
-@method_decorator(ratelimit(key='ip', rate='20/m', method=['GET', 'POST']), name='dispatch')
+@method_decorator(ratelimit(key='ip', rate='100/m', method=['GET', 'POST']), name='dispatch')
 class Login(LoginView):
     '''user login using class base view (CBV)'''
 

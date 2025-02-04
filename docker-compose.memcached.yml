@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  memcached:
+    image: memcached:latest
+    container_name: memcached
+    ports:
+      - "11211:11211"
+    command: memcached -m 1024 # set cache size to 1024MB

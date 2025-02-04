@@ -16,6 +16,7 @@ WORKDIR /django-project
 
 # Expose port
 EXPOSE 8000
+EXPOSE 11211
 
 # Set the DEBIAN_FRONTEND environment variable to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -28,9 +29,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
 ARG DEV=false
 
 # Update system
-# libpq5, build-essential are dependencies for psycopg3
+# libpq5, build-essential are dependencies for psycopg3 in requirements file
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends apt-utils libpq5 build-essential && \
+    apt-get install -y --no-install-recommends apt-utils libpq5 build-essential memcached && \
     apt-get upgrade -y && \
     apt-get autoremove -y
 
