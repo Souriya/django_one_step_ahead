@@ -10,7 +10,6 @@ import os
 from pathlib import Path
 import cherrypy
 import django
-from django.conf import settings
 from django.core.handlers.wsgi import WSGIHandler
 
 # tells Django where to find your settings file

@@ -1,5 +1,5 @@
-# Use python 3.10.13 on Debain 12 bookworm
-FROM python:3.10.13-bookworm
+# Use python 3.12 on Debain 12 bookworm
+FROM python:3.12-bookworm
 LABEL maintainer="Mong, mr.souriya@gmail.com, PITEC.la"
 
 ENV PYTHONUNBUFFERED=1
@@ -42,8 +42,10 @@ RUN apt-get update && \
 RUN python3 -m venv /venv
 
 # Upgrade pip and install install requirements
-RUN /venv/bin/pip install --upgrade pip && \
-    /venv/bin/pip install -r /tmp/production.txt
+RUN /venv/bin/pip install --upgrade pip
+RUN /venv/bin/pip install -r /tmp/production.txt
+# RUN pip install --upgrade pip
+# RUN pip install -r /tmp/production.txt
 
 # Install additional requirements for development if DEV is true, set this value in compose file
 RUN if [ $DEV = "true" ]; then /venv/bin/pip install -r /tmp/development.txt; fi

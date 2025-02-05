@@ -6,4 +6,4 @@ services:
     container_name: memcached
     ports:
       - "11211:11211"
-    command: memcached -m 1024 # set cache size to 1024MB
+    command: memcached -m 512 # set cache size to 512MB

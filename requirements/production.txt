@@ -13,4 +13,4 @@ django-import-export
 python-decouple
 django-ratelimit
 django-axes
-pylibmc
+pymemcache

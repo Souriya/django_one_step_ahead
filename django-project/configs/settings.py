@@ -10,12 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
+import os, sys
 from pathlib import Path
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-04p-1al#avxqx*snktubg%hihlx-8$fhm#e@h%+8oznn(t09nt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -46,18 +47,19 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'django_filters',
     'widget_tweaks',
-    'ratelimit', # rate limit
+#    'django_ratelimit', # rate limit
     'axes', # tracking user login fail attempts
 
     # custom apps
     #'apps.app_name',
-    'apps.users',
+    'users.apps.UsersConfig',
 ]
 
-AUTH_USER_MODEL = 'apps.users.User'
+AUTH_USER_MODEL = 'users.User'
 
 AUTHENTICATION_BACKENDS = [
-    'apps.users.MultiAuthBackend',  # custom authentication backend
+    'users.backends.MultiAuthBackend',  # custom authentication backend
+    'axes.backends.AxesStandaloneBackend',
     'django.contrib.auth.backends.ModelBackend',  # Default ModelBackend as fallback
 ]
 
@@ -72,7 +74,7 @@ MIDDLEWARE = [
 
     # 3rd party libs
     'whitenoise.middleware.WhiteNoiseMiddleware', # serving static file via django
-    'ratelimit.middleware.RatelimitMiddleware', # rate limit request
+#    'ratelimit.middleware.RatelimitMiddleware', # rate limit request
     'axes.middleware.AxesMiddleware', # tracking user login fail attempts
 
     # custom libs
@@ -152,15 +154,23 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'LOCATION': [
-            'memcached:11211', # memcached = docker service name, use this if you use docker
-            #'127.0.0.1:11211', # use this if you don't use docker
-        ]
+# when DEBUG = True, disable Memcached cache during development
+if DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+            'LOCATION': [
+                'memcached:11211', # memcached = docker service name, use this if you use docker
+                #'127.0.0.1:11211', # use this if you don't use docker
+            ]
+        }
+    }
 
 
 # Internationalization
@@ -206,7 +216,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # URL to redirect after login  if the contrib.auth.views.login view gets no
 # next parameter
-LOGIN_REDIRECT_URL = reverse('users:home')
+LOGIN_REDIRECT_URL = reverse_lazy('users:home')
 
 # URL to redirect the user to login page
 LOGIN_URL = reverse_lazy('users:login')

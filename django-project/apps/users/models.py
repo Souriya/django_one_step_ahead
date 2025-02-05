@@ -22,6 +22,10 @@ phone_regex = RegexValidator(
 class User(AbstractUser):
     '''custom user model inherited from default User model'''
 
+    class Meta:
+        verbose_name = "User"
+        verbose_name_plural = "Users"
+
     # add phone number as extra field
     phone_number = models.CharField(max_length=8, unique=True, validators=[phone_regex],  # Use the regex validator
         error_messages={
@@ -49,7 +53,7 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.phone_number})"
+        return f"{self.username} ({self.phone_number})"
 
 
 class Profile(models.Model):

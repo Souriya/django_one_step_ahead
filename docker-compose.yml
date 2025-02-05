@@ -15,13 +15,6 @@ services:
       file: docker-compose.memcached.yml
       service: memcached
 
-  pgadmin:
-    extends:
-      file: docker-compose.pgadmin.yml
-      service: pgadmin
-    depends_on:
-      - postgres
-
   django-app:
     extends:
       file: docker-compose.django.yml
