@@ -5,7 +5,7 @@ services:
     image: dpage/pgadmin4:latest  # Use the latest pgAdmin image
     container_name: pgadmin
     ports:
-      - "5050:5050"  # Map pgAdmin's port (5050 on host to 80 in container)
+      - "5050:5050"
     environment:
       PGADMIN_DEFAULT_EMAIL: pgadmin_email@example.com
       PGADMIN_DEFAULT_PASSWORD: pgadmin_password_example!!!
