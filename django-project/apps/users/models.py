@@ -26,18 +26,12 @@ class User(AbstractUser):
 
     # add phone number as extra field
     phone_number = models.CharField(max_length=8, unique=True, validators=[phone_regex],  # Use the regex validator
-        error_messages={
-            "unique": _("A user with that phone number already exists."),
-        },
-    )
+        null=True, blank=True, error_messages={"unique": _("A user with that phone number already exists."),},)
     # change email to be unique too, default django auth allow duplicated email address
     email = models.EmailField(max_length=60, unique=True,  # Make email unique
-        error_messages={
-            "unique": _("A user with that email address already exists."),
-        },
-    )
+        error_messages={"unique": _("A user with that email address already exists."),},)
     # now when create an user account, it requires username, phone and email
-    REQUIRED_FIELDS = ["email", "phone_number"]
+    REQUIRED_FIELDS = ["email"]
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
