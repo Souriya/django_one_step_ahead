@@ -1,10 +1,11 @@
 from django.urls import path, include
-from . import views
 
 # 3rd party libs
 from rest_framework.routers import DefaultRouter
 
 # from . import views
+from . import views
+
 
 app_name = 'users' # Namespace for URLs in this users app
 router = DefaultRouter()
@@ -13,7 +14,7 @@ router = DefaultRouter()
 urlpatterns = [
     path('home/', views.home, name='home'),
     path('login/', views.Login.as_view(), name='login'),
-    path('logout/', views.Logout.as_view(), name='logout'),
+    path('logout/', views.logout_view, name='logout'),
     path('api/', include(router.urls)),
 ]
 

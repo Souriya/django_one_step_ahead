@@ -1,9 +1,8 @@
 import logging
 from django_ratelimit.decorators import ratelimit
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -13,13 +12,14 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_http_methods
 from django.views.decorators.cache import never_cache
 
 from . import forms
 from . import models
 
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 @method_decorator(never_cache, name='dispatch')
 #@ratelimit(key='ip', rate='100/m', block=True)
@@ -44,11 +44,12 @@ class Login(LoginView):
         return super().form_invalid(form)  # Re-render the form with errors message
 
 
-@method_decorator(never_cache, name='dispatch')
-#@ratelimit(key='ip', rate='20/m', method=['GET', 'POST'], block=True)
-class Logout(LogoutView):
-    '''logout using CBV'''
-    next_page = reverse_lazy('users:login')  # Redirect to login page after logout
+@never_cache
+@require_http_methods(["GET", "POST"])
+def logout_view(request):
+    logout(request)
+    messages.success(request, "You have been successfully logged out.")
+    return redirect('users:login')
 
 
 @login_required

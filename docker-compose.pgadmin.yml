@@ -10,5 +10,8 @@ services:
       PGADMIN_DEFAULT_EMAIL: pgadmin_email@example.com
       PGADMIN_DEFAULT_PASSWORD: pgadmin_password_example!!!
     volumes:
-      - db_data:/var/lib/pgadmin4
+      - pgAdmin_data:/var/lib/pgadmin4
     restart: always # Restart pgAdmin if it crashes
+
+volumes:
+  pgAdmin_data:
