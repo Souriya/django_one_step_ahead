@@ -16,7 +16,6 @@ WORKDIR /django-project
 
 # Expose port
 EXPOSE 8000 # django
-EXPOSE 11211 # memcached
 EXPOSE 5050 # pgAdmin
 
 # Set the DEBIAN_FRONTEND environment variable to noninteractive

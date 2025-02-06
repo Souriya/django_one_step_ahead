@@ -7,6 +7,7 @@ services:
         args:
           - DEV=false
     container_name: django-app
+    #env_file: .env  # Load environment variables from .env
     ports:
       - "8000:8000"
     environment:
@@ -17,6 +18,8 @@ services:
       # - SECRET_KEY=django_secret_key
     volumes:
       - ./django-project:/django-project # Mount/sync django-project directory on host with django-project on docker
+    networks:  # Add this to connect to the database network
+      - internal-network
     command:
     >
         sh -c "python3 manage.py wait_for_db && \
