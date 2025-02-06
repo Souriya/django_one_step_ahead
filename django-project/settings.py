@@ -15,8 +15,8 @@ from pathlib import Path
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+BASE_DIR = Path(__file__).resolve().parent
+#sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -52,13 +52,13 @@ INSTALLED_APPS = [
 
     # custom apps
     #'apps.app_name',
-    'users.apps.UsersConfig',
+    'apps.users',
 ]
 
 AUTH_USER_MODEL = 'users.User'
 
 AUTHENTICATION_BACKENDS = [
-    'users.backends.MultiAuthBackend',  # custom authentication backend
+    'apps.users.backends.MultiAuthBackend',  # custom authentication backend
     'axes.backends.AxesStandaloneBackend',
     'django.contrib.auth.backends.ModelBackend',  # Default ModelBackend as fallback
 ]
@@ -74,13 +74,13 @@ MIDDLEWARE = [
 
     # 3rd party libs
     'whitenoise.middleware.WhiteNoiseMiddleware', # serving static file via django
-#    'ratelimit.middleware.RatelimitMiddleware', # rate limit request
     'axes.middleware.AxesMiddleware', # tracking user login fail attempts
 
     # custom libs
+    'middleware.CustomRateLimitMeaage',
 ]
 
-ROOT_URLCONF = 'configs.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {
@@ -98,7 +98,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'configs.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -268,3 +268,7 @@ AXES_IP_LOCKOUT_MINUTES = 60 # Block duration for IP addresses
 # in seconds after a successful login, this helps prevent brute-force attacks immediately after a successful login.
 AXES_COOLOFF_TIME = 300
 AXES_ADMIN_INTERFACE_ENABLED = True # enable the admin interface for managing blocked users/IPs.
+
+# Django-ratelimit setting
+# use case: set to False when you are using other DDOS protection such as Web Application Firewall WAF or cloudflare
+RATELIMIT_ENABLE = True
