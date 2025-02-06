@@ -5,10 +5,8 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import (
-    AbstractBaseUser,
-    BaseUserManager,
-    PermissionsMixin,
     AbstractUser,
 )
 
@@ -39,7 +37,7 @@ class User(AbstractUser):
         },
     )
     # now when create an user account, it requires username, phone and email
-    REQUIRED_FIELDS = ["email", "phone_number"]  # Email, phone number are now required
+    REQUIRED_FIELDS = ["email", "phone_number"]
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -50,6 +48,11 @@ class User(AbstractUser):
         if not self.pk:  # If this is a new object
             self.date_created = timezone.now()
         self.date_modified = timezone.now()
+
+        # Hash the password if it has been changed
+        if not self.pk or not self.password.startswith(('pbkdf2_sha256$', 'bcrypt$', 'argon2')):
+            self.password = make_password(self.password)
+
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -58,6 +61,10 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     '''user profile link to User, every user account has one associated profile'''
+
+    class Meta:
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
 
     LANGUAGE_CHOICES = [
         ('en', _('English')),

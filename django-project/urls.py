@@ -43,7 +43,7 @@ urlpatterns = [
         name='api-redocs'
     ),
     path('',
-        include('users.urls', namespace='users')
+        include('apps.users.urls', namespace='users')
     ),
 ]
 

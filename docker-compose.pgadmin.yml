@@ -2,16 +2,16 @@ version: "3.9"
 
 services:
   pgadmin:
-    image: dpage/pgadmin4:latest  # Use the latest pgAdmin image
+    image: dpage/pgadmin4:9  # Use the version 9.x pgAdmin image
     container_name: pgadmin
     ports:
-      - "5050:5050"
+      - "5050:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: pgadmin_email@example.com
       PGADMIN_DEFAULT_PASSWORD: pgadmin_password_example!!!
+      PGADMIN_CONFIG_SERVER_MODE: 'True'
     volumes:
-      - pgAdmin_data:/var/lib/pgadmin4
+      - pgadmin_data:/var/lib/pgadmin4
     restart: always # Restart pgAdmin if it crashes
-
-volumes:
-  pgAdmin_data:
+    networks:
+      - internal-network

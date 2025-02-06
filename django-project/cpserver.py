@@ -13,7 +13,7 @@ import django
 from django.core.handlers.wsgi import WSGIHandler
 
 # tells Django where to find your settings file
-os.environ["DJANGO_SETTINGS_MODULE"] = 'configs.settings'
+os.environ["DJANGO_SETTINGS_MODULE"] = 'settings'
 
 # initializes Django and loads the settings specified by DJANGO_SETTINGS_MODULE
 django.setup()

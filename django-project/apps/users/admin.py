@@ -1,50 +1,39 @@
 # coding=utf-8
 from django.contrib import admin
 from django.utils import timezone
-from django.contrib.auth.admin import UserAdmin as SysUserAdmin
+#from django.contrib.auth.admin import UserAdmin
 
 from . import models
-
-
-class UserAdmin(admin.ModelAdmin):
-    def display_created(self, obj): #Add this method to display created in local time
-        return timezone.localtime(obj.date_created).strftime('%Y-%m-%d %H:%M')
-    display_created.short_description = "Created" #Set the column header
-
-    def display_modified(self, obj): #Add this method to display modified in local time
-        return timezone.localtime(obj.date_modified).strftime('%Y-%m-%d %H:%M')
-    display_modified.short_description = "Modified" #Set the column header
-
-    list_display = ('email', 'first_name', 'last_name',
-                    'phone_number', 'display_created', 'display_modified','modified_by')
+from . import forms
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    model = models.Profile
 
 
 class ProfileInline(admin.StackedInline):  # Or admin.TabularInline for a more compact view
     model = models.Profile
     can_delete = False  # Prevent deleting the profile directly from the user admin
-    verbose_name_plural = 'Profiles'
 
 
-class CustomUserAdmin(SysUserAdmin):
-    inlines = (ProfileInline,)  # Add the inline to the UserAdmin
+@admin.register(models.User)
+class UserAdmin(admin.ModelAdmin):
+    model = models.User
+    inlines = (ProfileInline,)
 
-    def display_created(self, obj): #Add this method to display created in local time
+    def display_created(self, obj): # display created in local time
         return timezone.localtime(obj.date_created).strftime('%Y-%m-%d %H:%M')
-    display_created.short_description = "Created" #Set the column header
 
-    def display_modified(self, obj): #Add this method to display modified in local time
+    def display_modified(self, obj): # display modified in local time
         return timezone.localtime(obj.date_modified).strftime('%Y-%m-%d %H:%M')
+
+    display_created.short_description = "Created" #Set the column header
     display_modified.short_description = "Modified" #Set the column header
 
-    list_display = ('username', 'email', 'first_name', 'last_name',
-                    'phone_number', 'display_created', 'display_modified','modified_by')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'phone_number',
+                    'display_created', 'display_modified','modified_by')
 
 
-admin.site.register(models.User, CustomUserAdmin)
 admin.site.register(models.Profile)
 
 '''
