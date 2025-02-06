@@ -8,7 +8,7 @@ from . import forms
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    model = models.Profile
 
 
 class ProfileInline(admin.StackedInline):  # Or admin.TabularInline for a more compact view
@@ -16,28 +16,24 @@ class ProfileInline(admin.StackedInline):  # Or admin.TabularInline for a more c
     can_delete = False  # Prevent deleting the profile directly from the user admin
 
 
-
 @admin.register(models.User)
 class UserAdmin(admin.ModelAdmin):
     model = models.User
     inlines = (ProfileInline,)
-    def display_created(self, obj): #Add this method to display created in local time
-        return timezone.localtime(obj.date_created).strftime('%Y-%m-%d %H:%M')
-    display_created.short_description = "Created" #Set the column header
 
-    def display_modified(self, obj): #Add this method to display modified in local time
+    def display_created(self, obj): # display created in local time
+        return timezone.localtime(obj.date_created).strftime('%Y-%m-%d %H:%M')
+
+    def display_modified(self, obj): # display modified in local time
         return timezone.localtime(obj.date_modified).strftime('%Y-%m-%d %H:%M')
+
+    display_created.short_description = "Created" #Set the column header
     display_modified.short_description = "Modified" #Set the column header
 
     list_display = ('username', 'email', 'first_name', 'last_name', 'phone_number',
                     'display_created', 'display_modified','modified_by')
 
 
-#class CustomUserAdmin(UserAdmin):
-#    inlines = (ProfileInline,)  # Add the inline to the UserAdmin
-
-
-#admin.site.register(UserAdmin)
 admin.site.register(models.Profile)
 
 '''
