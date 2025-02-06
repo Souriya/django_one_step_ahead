@@ -1,5 +1,5 @@
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth import authenticate as builtin_authenticate
+from django.contrib.auth import authenticate
 from .models import User
 
 class MultiAuthBackend(ModelBackend):
