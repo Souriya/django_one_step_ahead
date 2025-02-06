@@ -1,0 +1,24 @@
+# docker-compose.yml (Main file)
+version: "3.9"
+
+volumes:
+  db_data: # named volume for persistant data
+
+services:
+  postgres:
+    extends:
+      file: docker-compose.db.yml
+      service: postgres
+
+  memcached:
+    extends:
+      file: docker-compose.memcached.yml
+      service: memcached
+
+  django-app:
+    extends:
+      file: docker-compose.django.yml
+      service: django-app
+    depends_on:
+      - postgres
+      - memcached

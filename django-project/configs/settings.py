@@ -10,11 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
+import os, sys
 from pathlib import Path
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-04p-1al#avxqx*snktubg%hihlx-8$fhm#e@h%+8oznn(t09nt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
-    'core',
 
     # 3rd party apps
     'rest_framework',
@@ -46,12 +47,21 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'django_filters',
     'widget_tweaks',
+#    'django_ratelimit', # rate limit
+    'axes', # tracking user login fail attempts
 
     # custom apps
-    #'custom_apps.app_name',
+    #'apps.app_name',
+    'users.apps.UsersConfig',
 ]
 
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'users.User'
+
+AUTHENTICATION_BACKENDS = [
+    'users.backends.MultiAuthBackend',  # custom authentication backend
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Default ModelBackend as fallback
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,7 +73,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # 3rd party libs
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # serving static file via django
+#    'ratelimit.middleware.RatelimitMiddleware', # rate limit request
+    'axes.middleware.AxesMiddleware', # tracking user login fail attempts
 
     # custom libs
 ]
@@ -87,7 +99,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'configs.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -143,6 +154,25 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# when DEBUG = True, disable Memcached cache during development
+if DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+            'LOCATION': [
+                'memcached:11211', # memcached = docker service name, use this if you use docker
+                #'127.0.0.1:11211', # use this if you don't use docker
+            ]
+        }
+    }
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -186,13 +216,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # URL to redirect after login  if the contrib.auth.views.login view gets no
 # next parameter
-#LOGIN_REDIRECT_URL = reverse('core:user_dashboard')
+LOGIN_REDIRECT_URL = reverse_lazy('users:home')
 
 # URL to redirect the user to login page
-#LOGIN_URL = reverse_lazy('core:login')
+LOGIN_URL = reverse_lazy('users:login')
 
-# URL to redirect the user to logout page
-#LOGOUT_URL = reverse_lazy('core:logout')
+# URL to redirect the user to after logout
+LOGOUT_URL = reverse_lazy('users:login')
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -229,3 +259,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'xxx@gmail.com'
 # EMAIL_HOST_PASSWORD = 'xxx'
+
+# Axes settings
+AXES_FAILURE_LIMIT = 10  # Number of login failed attempts before blocking
+AXES_ONLY_USER_PER_IP = True # If True, it will block the IP address instead of the user.
+AXES_LOCKOUT_MINUTES = 60  # Block duration in minutes
+AXES_IP_LOCKOUT_MINUTES = 60 # Block duration for IP addresses
+# in seconds after a successful login, this helps prevent brute-force attacks immediately after a successful login.
+AXES_COOLOFF_TIME = 300
+AXES_ADMIN_INTERFACE_ENABLED = True # enable the admin interface for managing blocked users/IPs.

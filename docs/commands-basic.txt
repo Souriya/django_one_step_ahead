@@ -2,7 +2,7 @@ sudo docker build .
 sudo docker-compose build
 
 sudo docker-compose up
-sudo docker-compose up -d # for running in the background in non-blocking mode
+sudo docker-compose up -d # -d for running in the background in non-blocking mode
 
 sudo docker-compose -f docker-compose-prod.yml up -d
 sudo docker-compose -f docker-compose-dev.yml up
@@ -30,7 +30,6 @@ sudo docker-compose run --rm django-app sh -c "python3 manage.py createsuperuser
 
 sudo docker-compose run --rm django-app sh -c "python3 manage.py shell"
 
-from django.contrib.auth.models import User
 
 git add .
 git commit -am "xxx"

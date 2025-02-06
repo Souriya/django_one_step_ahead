@@ -26,7 +26,7 @@ from drf_spectacular.views import (
 )
 
 urlpatterns = [
-    path('admin12321/', admin.site.urls),
+    path('admin12321/', admin.site.urls), # change default admin path to reduce bruteforce
     path('api-auth/',
          include('rest_framework.urls', namespace='rest_framework')),
     path(
@@ -43,7 +43,7 @@ urlpatterns = [
         name='api-redocs'
     ),
     path('',
-        include('core.urls', namespace='core')
+        include('users.urls', namespace='users')
     ),
 ]
 

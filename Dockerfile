@@ -1,5 +1,5 @@
-# Use python 3.10.13 on Debain 12 bookworm
-FROM python:3.10.13-bookworm
+# Use python 3.12 on Debain 12 bookworm
+FROM python:3.12-bookworm
 LABEL maintainer="Mong, mr.souriya@gmail.com, PITEC.la"
 
 ENV PYTHONUNBUFFERED=1
@@ -16,6 +16,7 @@ WORKDIR /django-project
 
 # Expose port
 EXPOSE 8000
+EXPOSE 11211
 
 # Set the DEBIAN_FRONTEND environment variable to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -28,9 +29,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
 ARG DEV=false
 
 # Update system
-# libpq5, build-essential are dependencies for psycopg3
+# libpq5, build-essential are dependencies for psycopg3 in requirements file
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends apt-utils libpq5 build-essential && \
+    apt-get install -y --no-install-recommends apt-utils libpq5 build-essential memcached && \
     apt-get upgrade -y && \
     apt-get autoremove -y
 
@@ -41,8 +42,10 @@ RUN apt-get update && \
 RUN python3 -m venv /venv
 
 # Upgrade pip and install install requirements
-RUN /venv/bin/pip install --upgrade pip && \
-    /venv/bin/pip install -r /tmp/production.txt
+RUN /venv/bin/pip install --upgrade pip
+RUN /venv/bin/pip install -r /tmp/production.txt
+# RUN pip install --upgrade pip
+# RUN pip install -r /tmp/production.txt
 
 # Install additional requirements for development if DEV is true, set this value in compose file
 RUN if [ $DEV = "true" ]; then /venv/bin/pip install -r /tmp/development.txt; fi
