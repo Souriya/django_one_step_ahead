@@ -16,7 +16,7 @@ services:
       - POSTGRES_DB=db_name_100
       # - SECRET_KEY=django_secret_key
     volumes:
-      - ./django-project:/django-project # Mount Django project directory
+      - ./django-project:/django-project # Mount/sync django-project directory on host with django-project on docker
     command:
     >
         sh -c "python3 manage.py wait_for_db && \

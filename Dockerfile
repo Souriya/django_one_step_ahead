@@ -8,15 +8,16 @@ ENV PYTHONUNBUFFERED=1
 COPY ./requirements/production.txt /tmp/production.txt
 COPY ./requirements/development.txt /tmp/development.txt
 
-# Copy django project files to django-project directory
+# Copy django project files from django-project on host to django-project directory on docker
 COPY ./django-project /django-project
 
 # Set working directory
 WORKDIR /django-project
 
 # Expose port
-EXPOSE 8000
-EXPOSE 11211
+EXPOSE 8000 # django
+EXPOSE 11211 # memcached
+EXPOSE 5050 # pgAdmin
 
 # Set the DEBIAN_FRONTEND environment variable to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -44,8 +45,6 @@ RUN python3 -m venv /venv
 # Upgrade pip and install install requirements
 RUN /venv/bin/pip install --upgrade pip
 RUN /venv/bin/pip install -r /tmp/production.txt
-# RUN pip install --upgrade pip
-# RUN pip install -r /tmp/production.txt
 
 # Install additional requirements for development if DEV is true, set this value in compose file
 RUN if [ $DEV = "true" ]; then /venv/bin/pip install -r /tmp/development.txt; fi

@@ -45,8 +45,10 @@ if __name__ == "__main__":
     DjangoApplication().run()
 
 '''
-you can also use cherrypy to server static files, param url: Relative url, param root: Path to static files root,
-but in our case, we are using WhiteNoise middleware to server static files instead
+you can also use cherrypy to server static files (param url: Relative url,
+param root: Path to static files root), in our case, this template, we are
+using WhiteNoise middleware to server static files instead. if you want to
+use CherryPy to serve static files, use code below and disable WhiteNoise.
 
     def mount_static(self, url, root):
         config = {
