@@ -59,6 +59,10 @@ class User(AbstractUser):
 class Profile(models.Model):
     '''user profile link to User, every user account has one associated profile'''
 
+    class Meta:
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
+
     LANGUAGE_CHOICES = [
         ('en', _('English')),
         ('lo', _('Lao')),

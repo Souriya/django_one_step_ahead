@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from django.conf import settings
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from .backends import MultiAuthBackend
 
 from . import models

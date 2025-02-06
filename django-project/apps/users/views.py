@@ -1,5 +1,4 @@
 import logging
-from django_ratelimit.decorators import ratelimit
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import LoginView
@@ -14,6 +13,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.cache import never_cache
+from django_ratelimit.decorators import ratelimit
 
 from . import forms
 from . import models
@@ -22,7 +22,7 @@ from . import models
 logger = logging.getLogger(__name__)
 
 @method_decorator(never_cache, name='dispatch')
-#@ratelimit(key='ip', rate='100/m', block=True)
+@method_decorator(ratelimit(key='header:X-Forwarded-For', rate='1000/10m', block=True), name='dispatch')
 class Login(LoginView):
     '''user login using class base view (CBV)'''
 
@@ -46,6 +46,7 @@ class Login(LoginView):
 
 @never_cache
 @require_http_methods(["GET", "POST"])
+@ratelimit(key='header:X-Forwarded-For', rate='1000/10m', block=True)
 def logout_view(request):
     logout(request)
     messages.success(request, "You have been successfully logged out.")
@@ -53,6 +54,7 @@ def logout_view(request):
 
 
 @login_required
+@ratelimit(key='header:X-Forwarded-For', rate='1000/10m', block=True)
 def home(request):
     context = {
         'title': 'Home',
